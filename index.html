@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>eZdravje :: 4. DN :: OIS 2017/2018</title>
+  <link href="knjiznice/css/styles.css" rel="stylesheet">
+  <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {padding-top: 70px;}
+  </style>
+  <script src="knjiznice/js/d3.v3.min.js"></script>
+  <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
+  <script src="knjiznice/js/bootstrap.min.js"></script>
+  <script src="knjiznice/js/koda.js"></script>
+</head>
+<body>
+
+  <!-- ZAČETEK: Menujska vrstica na vrhu spletne strani -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menujska-vrstica">
+          <span class="sr-only">Prikaži menu</span>
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+        <!-- ZAČETEK: Ime vaše aplikacije -->
+        <a class="navbar-brand" href="index.html">Pivo je zakon</a>
+        <!-- KONEC: Ime vaše aplikacije -->
+      </div>
+      <div class="collapse navbar-collapse" id="menujska-vrstica">
+        <ul class="nav navbar-nav">
+          <li><a href="opis.html">Opis ideje</a></li>
+          <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
+          <li><a href="#" onclick="generirajPodatke(1);generirajPodatke(2);generirajPodatke(3);">Generiranje podatkov <span id="kreirajSporociloNav"></span></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- KONEC: Menujska vrstica na vrhu spletne strani -->
+
+  <!-- ZAČETEK: Vsebina aplikacije -->
+  	<div class="container">
+  		<div class="page-header"><h2>Pivo je zakon <small>Maček pa ne</small></h2></div>
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<h3>Meritve vitalnih znakov</h3>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Ime in priimek</span>
+								<select class="form-control input-md" id="dodajVitalneObstojeciID">
+									<option selected value=""></option>
+									<option value ="ebff33b1-58fb-4354-852b-926f35e1fcd6">Janez Novak</option>
+									<option value ="8d2f499f-b432-44bb-86ac-33188f3610b8">Micka Zmaga</option>
+									<option value ="2b4338d5-9483-49ca-8149-d6054bdd0cd6">Matic Gril</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">EHR ID</span><input id="dodajVitalneIDEhr" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<button type="button" class="btn btn-primary btn-sm top-buffer-10" onclick="dodajVitalneID();">Dodaj vitalne podatke</button>
+								<span id="dodajVitalneIDSporocilo"></span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								Meritve vitalnih znakov za <span id="dodajVitalneIme"></span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Datum in ura meritve</span>
+								<select class="form-control input-md" id="preberiObstojeciEHRVitalniDatum">
+									<option selected value=""></option>
+								</select>
+							</div>
+						</div>
+						<div class="row bot-buffer-40">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Telesna višina</span>
+								<div class="input-group"><input id="dodajVitalnotelesnaVisina" type="text" class="form-control input-mini" placeholder="185" disabled>
+								<span class="input-group-addon">cm</span></div>
+								<span class="label label-default">Telesna teža</span>
+								<div class="input-group">
+								<input id="dodajVitalnotelesnaTeza" type="text" class="form-control input-mini" placeholder="80.00" disabled>
+								<span class="input-group-addon">kg</span></div>
+								<span class="label label-default">Telesna temperatura</span>
+								<div class="input-group"><input id="dodajVitalnotelesnaTemperatura" type="text" class="form-control input-mini" placeholder="36.50" disabled>
+								<span class="input-group-addon">°C</span></div>
+								<span class="label label-default">Nasičenost krvi s kisikom</span>
+								<div class="input-group"><input id="dodajVitalnonasicenostKrviSKisikom" type="text" class="form-control input-mini" placeholder="98" disabled>
+								<span class="input-group-addon">%</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<h3>Vnesi meritve vitalnih znakov</h3>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Ime in priimek</span>
+								<select class="form-control input-md" id="preberiEHRVnos">
+									<option selected value=""></option>
+									<option value ="ebff33b1-58fb-4354-852b-926f35e1fcd6">Janez Novak</option>
+									<option value ="8d2f499f-b432-44bb-86ac-33188f3610b8">Micka Zmaga</option>
+									<option value ="2b4338d5-9483-49ca-8149-d6054bdd0cd6">Matic Gril</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">EHR ID</span><input id="dodajEHRVnos" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+								<button type="button" class="btn btn-primary btn-sm top-buffer-10" onclick="preveriEHRid();">Preveri EHR ID</button><span id="preveriEHRidSporocilo"></span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								Vnos meritev vitalnih znakov za <span id="dodajImeVnos"></span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Datum in ura</span>
+								<input id="dodajVitalneMeritveDatum" type="text" class="form-control input-mini" placeholder="2014-11-21T11:40Z">
+								<span class="label label-default">Telesna višina</span>
+								<div class="input-group"><input id="dodajVitalneMeritveVisina" type="text" class="form-control input-mini" placeholder="185">
+								<span class="input-group-addon">cm</span></div>
+								<span class="label label-default">Telesna teža</span>
+								<div class="input-group">
+								<input id="dodajVitalneMeritveTeza" type="text" class="form-control input-mini" placeholder="80.00">
+								<span class="input-group-addon">kg</span></div>
+								<span class="label label-default">Telesna temperatura</span>
+								<div class="input-group"><input id="dodajVitalneMeritveTemp" type="text" class="form-control input-mini" placeholder="36.50">
+								<span class="input-group-addon">°C</span></div>
+								<span class="label label-default">Nasičenost krvi s kisikom</span>
+								<div class="input-group"><input id="dodajVitalneMeritveKisik" type="text" class="form-control input-mini" placeholder="98">
+								<span class="input-group-addon">%</span></div>
+								<button type="button" class="btn btn-primary btn-sm top-buffer-10" onclick="dodajVitalneMeritve();">Dodaj vitalne meritve</button><span id="dodajVitalneMeritveSporocilo"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class ="row">
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<h3>Izbira pijace</h3>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row bot-buffer-20">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Pijača</span>
+								<select class="form-control input-md" id="seznamPijac">
+									<option selected value=""></option>
+								</select>
+								<span class="label label-default">Količina</span>
+								<select class="form-control input-md" id="kolicinaPijac">
+									<option value ="0.05">0.05l</option>
+									<option value ="0.2">0,2l</option>
+									<option value ="0.3">0,3l</option>
+									<option value ="0.5">0,5l</option>
+								</select>
+								<button type="button" class="btn btn-primary btn-sm top-buffer-30" onclick="dodajPijacoNaSeznam();">Spij</button><span id="dodajPivoSporocilo"></span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<b>Lastnosti pijace</b>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<span class="label label-default">Ime</span>
+								<input id="imePijaca" type="text" class="form-control input-mini" placeholder="Laško" disabled>
+								<span class="label label-default">Izvor</span>
+								<input id="izvorPijaca" type="text" class="form-control input-mini" placeholder="Slovenia" disabled>
+								<span class="label label-default">Kategorija</span>
+								<input id="kategorijaPijaca" type="text" class="form-control input-mini" placeholder="Beer" disabled>
+								<span class="label label-default">Alkohol</span>
+								<div class="input-group"><input id="alkoholPijaca" type="text" class="form-control input-mini" placeholder="5" disabled><span class="input-group-addon">%</span></div>
+								<span class="label label-default">Okus</span>
+								<textarea id="okusPijaca" name="okusPijaca" rows="6" type="text" class="form-control input-mini" placeholder="Cloudy white colour; citrus/lemonade/lime nose with grapefruit notes; crisp, refreshing grapefruit/citrus flavours, zesty finish" disabled></textarea> 								
+								<span class="label label-default">Streženje pijače</span>
+								<textarea id="strezenjePijaca" name="strezenjePijaca" rows="2" type="text" class="form-control input-mini" placeholder="Serve with barbeque wings and finger foods." disabled></textarea> 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<h3>Količina alkohola v krvi</h3>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<svg id="fillgauge2" width="97%" height="250"></svg>
+								<script language="JavaScript">
+								    var config1 = liquidFillGaugeDefaultSettings();
+								    config1.circleColor = "#ffcc00";
+								    config1.textColor = "#ffcc00";
+								    config1.waveTextColor = "#ffcc00";
+								    config1.waveColor = "#FFFB80";
+								    config1.circleThickness = 0.05;
+								    config1.textVertPosition = 0.3;
+								    config1.waveAnimateTime = 1250;
+								    var gauge2= loadLiquidFillGauge("fillgauge2", 0, config1);
+								</script>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<b>Seznam popitih pijač</b>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<ul class="list-group" id="seznamZaSpit">
+								</ul>
+								<button type="button" class="btn btn-primary btn-sm top-buffer-20" onclick="strezniSe();">Strezni se</button><span id="spijPijaceSporocilo"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+  <!-- KONEC: Vsebina aplikacije -->
+
+</body>
+</html>
